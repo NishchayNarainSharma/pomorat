@@ -30,13 +30,13 @@ const Stopwatch = () => {
   };
 
   return (
-    <div className="min-h-screen pt-20 bg-gradient-to-b from-blue-100 to-purple-100">
-      <div className="max-w-md mx-auto bg-white rounded-2xl shadow-xl p-8 space-y-8">
-        <h1 className="text-3xl font-bold text-center text-gray-800">
+    <div className="min-h-screen flex items-center justify-center pt-16 pb-8 px-4">
+      <div className="w-full max-w-md bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-6 md:p-8 space-y-6 relative z-10">
+        <h1 className="text-2xl md:text-3xl font-bold text-center text-gray-800">
           Stopwatch 🕒
         </h1>
 
-        <div className="flex justify-center scale-150 mb-8">
+        <div className="flex justify-center scale-125 md:scale-150 mb-6 md:mb-8">
           <Rat />
         </div>
 

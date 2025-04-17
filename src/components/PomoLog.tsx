@@ -27,10 +27,10 @@ const PomoLog = () => {
   };
 
   return (
-    <div className="min-h-screen pt-20 bg-gradient-to-b from-blue-100 to-purple-100">
-      <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl p-8 space-y-8">
+    <div className="min-h-screen flex items-center justify-center pt-16 pb-8 px-4">
+      <div className="w-full max-w-2xl bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-6 md:p-8 space-y-6 relative z-10">
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold text-gray-800">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
             Pomo Log 📝
           </h1>
           <div className="scale-75">
@@ -45,7 +45,7 @@ const PomoLog = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="bg-gray-50 rounded-lg p-4 flex items-center justify-between"
+              className="bg-gray-50/80 backdrop-blur-sm rounded-lg p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
             >
               <div className="flex items-center space-x-4">
                 <div className={`w-3 h-3 rounded-full ${log.completed ? 'bg-green-500' : 'bg-red-500'}`} />
@@ -66,8 +66,8 @@ const PomoLog = () => {
         </div>
 
         <div className="mt-8 text-center text-gray-600">
-          <p>Total Completed Sessions: {mockLogs.filter(log => log.completed).length}</p>
-          <p>Total Focus Time: {mockLogs.reduce((acc, log) => acc + (log.completed ? log.duration : 0), 0)} minutes</p>
+          <p className="text-sm md:text-base">Total Completed Sessions: {mockLogs.filter(log => log.completed).length}</p>
+          <p className="text-sm md:text-base">Total Focus Time: {mockLogs.reduce((acc, log) => acc + (log.completed ? log.duration : 0), 0)} minutes</p>
         </div>
       </div>
     </div>
