@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
 import { PlayIcon, PauseIcon, ArrowPathIcon } from '@heroicons/react/24/solid';
 import { motion, AnimatePresence } from 'framer-motion';
-import Rat from './Rat';
 import CircularProgress from './CircularProgress';
-
-const MAX_TIME = 3600; // 1 hour in seconds
+import Rat from './Rat';
 
 const Stopwatch = () => {
   const [time, setTime] = useState(0);
@@ -14,11 +12,20 @@ const Stopwatch = () => {
     let interval: number;
     if (isRunning) {
       interval = setInterval(() => {
-        setTime(t => t + 1);
+        setTime(prevTime => prevTime + 1);
       }, 1000);
     }
     return () => clearInterval(interval);
   }, [isRunning]);
+
+  const handleStartStop = () => {
+    setIsRunning(!isRunning);
+  };
+
+  const handleReset = () => {
+    setIsRunning(false);
+    setTime(0);
+  };
 
   const formatTime = (seconds: number): string => {
     const hours = Math.floor(seconds / 3600);
@@ -27,48 +34,39 @@ const Stopwatch = () => {
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
-  const handleStartStop = () => setIsRunning(!isRunning);
-  const handleReset = () => {
-    setIsRunning(false);
-    setTime(0);
-  };
+  // Calculate progress for the circle (resets every hour)
+  const circleProgress = (time % 3600) / 3600;
 
   return (
-    <div className="min-h-screen flex items-center justify-center pt-16 pb-8 px-4">
-      <div className="w-full max-w-md bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-xl p-6 md:p-8 space-y-6 border-2 border-purple-100 dark:border-purple-900">
-        <h1 className="text-2xl md:text-3xl font-bold text-center bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+    <div className="min-h-screen flex items-center justify-center px-4 pb-4 pt-20">
+      <div className="w-full max-w-md bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-xl p-4 md:p-6 space-y-4 md:space-y-6 border-2 border-purple-900">
+        <h1 className="text-xl md:text-3xl font-bold text-center bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
           Stopwatch 🕒
         </h1>
 
-        <div className="flex justify-center scale-125 md:scale-150 mb-6 md:mb-8">
+        <div className="flex justify-center scale-100 md:scale-125">
           <Rat />
         </div>
 
-        <div className="flex flex-col items-center space-y-8">
+        <div className="flex flex-col items-center space-y-4 md:space-y-6">
           <div className="relative">
             <CircularProgress 
-              progress={(time % MAX_TIME) / MAX_TIME}
+              progress={circleProgress}
               isRunning={isRunning}
-              size={280}
+              size={Math.min(window.innerWidth - 64, 280)}
             />
             
             <div className="absolute inset-0 flex items-center justify-center">
-              <motion.div
-                key={time}
-                initial={{ scale: 1.2, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
-                className="timer-display"
-              >
+              <div className="timer-display text-3xl md:text-4xl lg:text-5xl">
                 {formatTime(time)}
-              </motion.div>
+              </div>
             </div>
           </div>
 
-          <div className="flex space-x-4">
+          <div className="flex space-x-3 md:space-x-4">
             <motion.button
               onClick={handleStartStop}
-              className="timer-button"
+              className="timer-button px-4 md:px-6 py-2 md:py-3"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               layout
@@ -82,7 +80,7 @@ const Stopwatch = () => {
                     exit={{ scale: 0, rotate: 180 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <PauseIcon className="w-6 h-6" />
+                    <PauseIcon className="w-5 h-5 md:w-6 md:h-6" />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -92,7 +90,7 @@ const Stopwatch = () => {
                     exit={{ scale: 0, rotate: -180 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <PlayIcon className="w-6 h-6" />
+                    <PlayIcon className="w-5 h-5 md:w-6 md:h-6" />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -100,16 +98,11 @@ const Stopwatch = () => {
 
             <motion.button
               onClick={handleReset}
-              className="timer-button"
+              className="timer-button px-4 md:px-6 py-2 md:py-3"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <motion.div
-                animate={{ rotate: isRunning ? 360 : 0 }}
-                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-              >
-                <ArrowPathIcon className="w-6 h-6" />
-              </motion.div>
+              <ArrowPathIcon className="w-5 h-5 md:w-6 md:h-6" />
             </motion.button>
           </div>
         </div>

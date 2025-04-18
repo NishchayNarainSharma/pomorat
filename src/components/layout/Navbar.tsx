@@ -8,11 +8,11 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-0 left-0 right-0 bg-gray-800/80 backdrop-blur-md shadow-sm shadow-purple-900/20 z-50 transition-colors duration-300">
-      <div className="max-w-4xl mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+      <div className="max-w-4xl mx-auto px-3 md:px-4">
+        <div className="flex items-center justify-between h-14 md:h-16">
           <Link 
             to="/" 
-            className="text-xl md:text-2xl font-bold text-gray-100 flex items-center space-x-2 hover:text-purple-400 transition-colors"
+            className="text-lg md:text-xl lg:text-2xl font-bold text-gray-100 flex items-center space-x-2 hover:text-purple-400 transition-colors"
           >
             <motion.span
               animate={{ rotate: [0, 10, -10, 0] }}
@@ -25,10 +25,10 @@ const Navbar = () => {
             </span>
           </Link>
           
-          <div className="flex space-x-2">
+          <div className="flex space-x-2 md:space-x-3">
             <Link
               to="/"
-              className={`px-3 py-2 rounded-xl text-base md:text-lg font-medium transition-all ${
+              className={`px-2.5 md:px-3 py-1.5 md:py-2 rounded-xl text-sm md:text-base font-medium transition-all ${
                 isActive('/') 
                   ? 'text-white bg-gradient-to-r from-purple-600 to-pink-600 shadow-md' 
                   : 'text-gray-300 hover:text-purple-400 hover:bg-purple-900/30'
@@ -38,7 +38,7 @@ const Navbar = () => {
             </Link>
             <Link
               to="/stopwatch"
-              className={`px-3 py-2 rounded-xl text-base md:text-lg font-medium transition-all ${
+              className={`px-2.5 md:px-3 py-1.5 md:py-2 rounded-xl text-sm md:text-base font-medium transition-all ${
                 isActive('/stopwatch')
                   ? 'text-white bg-gradient-to-r from-purple-600 to-pink-600 shadow-md'
                   : 'text-gray-300 hover:text-purple-400 hover:bg-purple-900/30'
@@ -48,7 +48,7 @@ const Navbar = () => {
             </Link>
             <Link
               to="/log"
-              className={`px-3 py-2 rounded-xl text-base md:text-lg font-medium transition-all ${
+              className={`px-2.5 md:px-3 py-1.5 md:py-2 rounded-xl text-sm md:text-base font-medium transition-all ${
                 isActive('/log')
                   ? 'text-white bg-gradient-to-r from-purple-600 to-pink-600 shadow-md'
                   : 'text-gray-300 hover:text-purple-400 hover:bg-purple-900/30'
