@@ -1,19 +1,25 @@
 import { useEffect } from 'react';
 import { useTimerStore } from '../store/timerStore';
-import { PlayIcon, PauseIcon, ArrowPathIcon } from '@heroicons/react/24/solid';
+import { PlayIcon, PauseIcon, ArrowPathIcon, BeakerIcon } from '@heroicons/react/24/solid';
 import { motion, AnimatePresence } from 'framer-motion';
 import CircularProgress from './CircularProgress';
 
 const Timer = () => {
   const { 
     timeLeft, 
-    isRunning, 
+    isRunning,
+    isBreak,
     milestonesHit,
     startTimer, 
     pauseTimer, 
     resetTimer, 
     tick,
-    totalTime
+    totalTime,
+    timerPresets,
+    selectedPreset,
+    setSelectedPreset,
+    switchToBreak,
+    switchToWork
   } = useTimerStore();
 
   useEffect(() => {
@@ -34,6 +40,34 @@ const Timer = () => {
 
   return (
     <div className="flex flex-col items-center space-y-8">
+      {/* Timer Type Indicator */}
+      <div className="text-lg font-medium text-gray-300">
+        {isBreak ? '☕ Break Time' : '🎯 Focus Time'}
+      </div>
+
+      {/* Timer Duration Slider (only show during non-break and when timer is not running) */}
+      {!isBreak && !isRunning && (
+        <div className="w-full max-w-xs space-y-2">
+          <div className="flex justify-between text-sm text-gray-400">
+            {timerPresets.map((preset) => (
+              <span key={preset}>{preset}</span>
+            ))}
+          </div>
+          <input
+            type="range"
+            min={Math.min(...timerPresets)}
+            max={Math.max(...timerPresets)}
+            value={selectedPreset}
+            step={1}
+            onChange={(e) => setSelectedPreset(Number(e.target.value))}
+            className="w-full accent-purple-400"
+          />
+          <div className="text-center text-sm text-gray-400">
+            {selectedPreset} minutes
+          </div>
+        </div>
+      )}
+
       <div className="relative">
         <CircularProgress 
           progress={1 - (timeLeft / totalTime)}
@@ -80,7 +114,7 @@ const Timer = () => {
             )}
           </AnimatePresence>
         </motion.button>
-        
+
         <motion.button
           onClick={resetTimer}
           className="timer-button"
@@ -94,9 +128,20 @@ const Timer = () => {
             <ArrowPathIcon className="w-6 h-6" />
           </motion.div>
         </motion.button>
+
+        {!isRunning && (
+          <motion.button
+            onClick={isBreak ? switchToWork : switchToBreak}
+            className="timer-button"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <BeakerIcon className="w-6 h-6" />
+          </motion.button>
+        )}
       </div>
 
-      <div className="text-lg font-semibold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+      <div className="text-lg font-semibold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
         Milestones Hit: {milestonesHit}
       </div>
     </div>
