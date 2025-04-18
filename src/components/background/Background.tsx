@@ -1,22 +1,7 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import Rat from '../Rat';
-
-const FloatingShape = ({ className = '', delay = 0 }) => (
-  <motion.div
-    className={`absolute rounded-full ${className}`}
-    animate={{
-      y: [0, -20, 0],
-      opacity: [0.5, 0.8, 0.5],
-    }}
-    transition={{
-      duration: 3,
-      delay,
-      repeat: Infinity,
-      ease: "easeInOut"
-    }}
-  />
-);
+import FloatingShape from './FloatingShape';
 
 const Background = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -34,21 +19,22 @@ const Background = () => {
   const numGrassBlades = windowWidth < 640 ? 10 : 20;
 
   return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none bg-gradient-to-b from-pink-50 via-purple-50 to-blue-50">
+    <div className="fixed inset-0 overflow-hidden pointer-events-none transition-colors duration-300
+      bg-gradient-to-b from-purple-950 via-gray-900 to-pink-950">
       {/* Decorative floating shapes */}
-      <FloatingShape className="w-32 h-32 bg-pink-100/40 blur-2xl left-1/4 top-1/4" delay={0} />
-      <FloatingShape className="w-40 h-40 bg-purple-100/40 blur-2xl right-1/4 top-1/3" delay={1} />
-      <FloatingShape className="w-24 h-24 bg-blue-100/40 blur-2xl left-1/3 bottom-1/3" delay={2} />
+      <FloatingShape className="w-32 h-32 bg-pink-800/20 blur-2xl left-1/4 top-1/4" delay={0} />
+      <FloatingShape className="w-40 h-40 bg-purple-800/20 blur-2xl right-1/4 top-1/3" delay={1} />
+      <FloatingShape className="w-24 h-24 bg-blue-800/20 blur-2xl left-1/3 bottom-1/3" delay={2} />
       
-      {/* Grass */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-green-300 to-green-200 opacity-60" />
+      {/* Ground */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-purple-900 to-purple-800 opacity-60" />
       
       {/* Animated grass blades */}
       <div className="absolute bottom-0 left-0 right-0 h-24 flex justify-around">
         {[...Array(numGrassBlades)].map((_, i) => (
           <motion.div
             key={i}
-            className="w-2 sm:w-3 bg-green-400/80 rounded-t-full"
+            className="w-2 sm:w-3 bg-purple-400/80 dark:bg-purple-600/80 rounded-t-full"
             style={{
               height: `${Math.random() * 30 + 30}px`,
               originY: 1

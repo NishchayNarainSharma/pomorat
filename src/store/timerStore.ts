@@ -2,10 +2,8 @@ import { create } from 'zustand';
 
 interface TimerState {
   timeLeft: number;
+  totalTime: number;
   isRunning: boolean;
-  isPaused: boolean;
-  workDuration: number;
-  breakDuration: number;
   milestonesHit: number;
   startTimer: () => void;
   pauseTimer: () => void;
@@ -13,33 +11,31 @@ interface TimerState {
   tick: () => void;
 }
 
+const POMODORO_TIME = 25 * 60; // 25 minutes in seconds
+
 export const useTimerStore = create<TimerState>((set) => ({
-  timeLeft: 45 * 60, // 45 minutes in seconds
+  timeLeft: POMODORO_TIME,
+  totalTime: POMODORO_TIME,
   isRunning: false,
-  isPaused: false,
-  workDuration: 45 * 60,
-  breakDuration: 15 * 60,
   milestonesHit: 0,
 
-  startTimer: () => set({ isRunning: true, isPaused: false }),
-  pauseTimer: () => set({ isRunning: false, isPaused: true }),
+  startTimer: () => set({ isRunning: true }),
+  
+  pauseTimer: () => set({ isRunning: false }),
+  
   resetTimer: () => set({ 
-    timeLeft: 45 * 60,
-    isRunning: false,
-    isPaused: false 
+    timeLeft: POMODORO_TIME,
+    isRunning: false 
   }),
+  
   tick: () => set((state) => {
-    if (!state.isRunning) return state;
-    
-    const newTimeLeft = state.timeLeft - 1;
-    if (newTimeLeft <= 0) {
+    if (state.timeLeft <= 0) {
       return {
-        timeLeft: state.workDuration,
+        timeLeft: POMODORO_TIME,
         isRunning: false,
         milestonesHit: state.milestonesHit + 1
       };
     }
-    
-    return { timeLeft: newTimeLeft };
+    return { timeLeft: state.timeLeft - 1 };
   }),
 })); 
