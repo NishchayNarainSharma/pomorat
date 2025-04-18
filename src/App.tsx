@@ -6,8 +6,15 @@ import Navbar from './components/layout/Navbar';
 import Background from './components/background/Background';
 import Rat from './components/Rat';
 import SpotifyConnect from './components/SpotifyConnect';
+import { useState } from 'react';
+import TaskInput from './components/TaskInput';
+import { useTimerStore } from './store/timerStore';
+import { AnimatePresence } from 'framer-motion';
 
 function App() {
+  const [showTaskInput, setShowTaskInput] = useState(false);
+  const taskName = useTimerStore((state) => state.taskName);
+
   return (
     <Router>
       <div className="relative min-h-screen bg-gray-900 transition-colors duration-300">
@@ -35,12 +42,33 @@ function App() {
                 <div className="w-full max-w-md bg-gray-800/95 backdrop-blur-sm rounded-2xl shadow-lg p-4 border border-purple-800/50 hover:border-purple-700/50 transition-colors">
                   <SpotifyConnect />
                 </div>
+
+                <div className="w-full max-w-md mx-auto text-center">
+                  {taskName ? (
+                    <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
+                      {taskName}
+                    </h2>
+                  ) : (
+                    <button
+                      onClick={() => setShowTaskInput(true)}
+                      className="mb-4 px-4 py-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                    >
+                      + Add Task
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           } />
           <Route path="/stopwatch" element={<Stopwatch />} />
           <Route path="/log" element={<PomoLog />} />
         </Routes>
+
+        <AnimatePresence>
+          {showTaskInput && (
+            <TaskInput onClose={() => setShowTaskInput(false)} />
+          )}
+        </AnimatePresence>
       </div>
     </Router>
   );

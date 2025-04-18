@@ -3,6 +3,7 @@ import { useTimerStore } from '../store/timerStore';
 import { PlayIcon, PauseIcon, ArrowPathIcon, BeakerIcon } from '@heroicons/react/24/solid';
 import { motion, AnimatePresence } from 'framer-motion';
 import CircularProgress from './CircularProgress';
+import TaskInput from './TaskInput';
 
 const Timer = () => {
   const { 
@@ -10,6 +11,8 @@ const Timer = () => {
     isRunning,
     isBreak,
     milestonesHit,
+    taskName,
+    showTaskInput,
     startTimer, 
     pauseTimer, 
     resetTimer, 
@@ -19,7 +22,8 @@ const Timer = () => {
     selectedPreset,
     setSelectedPreset,
     switchToBreak,
-    switchToWork
+    switchToWork,
+    setShowTaskInput
   } = useTimerStore();
 
   useEffect(() => {
@@ -39,46 +43,24 @@ const Timer = () => {
   };
 
   return (
-    <div className="flex flex-col items-center space-y-4 md:space-y-6">
-      {/* Timer Type Indicator */}
-      <div className="text-base md:text-lg font-medium text-gray-300">
-        {isBreak ? '☕ Break Time' : '🎯 Focus Time'}
-      </div>
-
-      {/* Timer Duration Slider (only show during non-break and when timer is not running) */}
-      {!isBreak && !isRunning && (
-        <div className="w-full max-w-xs space-y-2 px-4">
-          <div className="flex justify-between text-xs md:text-sm text-gray-400">
-            {timerPresets.map((preset) => (
-              <span key={preset}>{preset}</span>
-            ))}
-          </div>
-          <input
-            type="range"
-            min={Math.min(...timerPresets)}
-            max={Math.max(...timerPresets)}
-            value={selectedPreset}
-            step={1}
-            onChange={(e) => setSelectedPreset(Number(e.target.value))}
-            className="w-full accent-purple-400"
-          />
-          <div className="text-center text-xs md:text-sm text-gray-400">
-            {selectedPreset} minutes
-          </div>
-        </div>
-      )}
-
+    <div className="relative flex flex-col items-center gap-6 w-full max-w-sm mx-auto">
+      <AnimatePresence>
+        {showTaskInput && (
+          <TaskInput onClose={() => setShowTaskInput(false)} />
+        )}
+      </AnimatePresence>
+      
       <div className="relative">
-        <CircularProgress 
-          progress={1 - (timeLeft / totalTime)}
-          isRunning={isRunning}
-          size={Math.min(window.innerWidth - 64, 280)}
-        />
-        
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="timer-display text-4xl md:text-5xl">
+        <CircularProgress progress={1 - timeLeft / totalTime} />
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <div className="text-5xl font-bold sm:text-6xl">
             {formatTime(timeLeft)}
           </div>
+          {taskName && (
+            <div className="mt-2 text-gray-400 text-sm sm:text-base">
+              {taskName}
+            </div>
+          )}
         </div>
       </div>
       
